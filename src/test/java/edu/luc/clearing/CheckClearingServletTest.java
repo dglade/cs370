@@ -28,15 +28,17 @@ public class CheckClearingServletTest {
 	}
 	
 	@Test
-	public void shouldParseWholeValuesLessThanTen() throws Exception {
-        assertEquals(100, servlet.parseAmount("one").intValue());
-        assertEquals(200, servlet.parseAmount("two").intValue());
-        assertEquals(300, servlet.parseAmount("three").intValue());
-        assertEquals(400, servlet.parseAmount("four").intValue());
-        assertEquals(500, servlet.parseAmount("five").intValue());
-        assertEquals(600, servlet.parseAmount("six").intValue());
-        assertEquals(700, servlet.parseAmount("seven").intValue());
-        assertEquals(800, servlet.parseAmount("eight").intValue());
-        assertEquals(900, servlet.parseAmount("nine").intValue());
+	public void shouldIgnoreMalformedAmounts() throws Exception {
+		assertEquals("{}", servlet.response(new StringReader("[\"purple\"]")));
+	}
+	
+	@Test
+	public void shouldIgnoreCase() throws Exception {
+		assertEquals(300, servlet.parseAmount("Three").intValue());
+	}
+	
+	@Test
+	public void shouldHandleZero() throws Exception {
+		assertEquals(0, servlet.parseAmount("zero").intValue());
 	}
 }

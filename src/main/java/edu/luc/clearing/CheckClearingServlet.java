@@ -19,6 +19,7 @@ public class CheckClearingServlet extends HttpServlet {
 	private static final Map<String, Integer> AMOUNTS = new HashMap<String, Integer>();
 	
 	public CheckClearingServlet() {
+		AMOUNTS.put("zero", 0);
 		AMOUNTS.put("one", 100);
 		AMOUNTS.put("two", 200);
 		AMOUNTS.put("three", 300);
@@ -45,7 +46,7 @@ public class CheckClearingServlet extends HttpServlet {
 	}
 
 	public Integer parseAmount(String amount) {
-		return AMOUNTS.get(amount);
+		return AMOUNTS.get(amount.toLowerCase());
 	}
 
 	private Type requestType() {
