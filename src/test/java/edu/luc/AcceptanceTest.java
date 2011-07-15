@@ -1,23 +1,22 @@
 package edu.luc;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import edu.luc.clearing.CheckClearingServlet;
+import edu.luc.clearing.CheckParser;
 
 public class AcceptanceTest {
 
-	private CheckClearingServlet servlet;
+	private CheckParser parser;
 
 	@Before
 	public void setUp() {
-		servlet = new CheckClearingServlet();
+		parser = new CheckParser();
 	}
-	
-	
 	
 	@Test
 	public void shouldParseWholeValuesLessThanTen() throws Exception {
@@ -30,21 +29,56 @@ public class AcceptanceTest {
         assertThat(parsedAmountOf("seven"), is(equalTo(700)));
         assertThat(parsedAmountOf("eight"), is(equalTo(800)));
         assertThat(parsedAmountOf("nine"), is(equalTo(900)));
-        
-//        assertEquals(200, servlet.parseAmount("two").intValue());
-//        assertEquals(300, servlet.parseAmount("three").intValue());
-//        assertEquals(400, servlet.parseAmount("four").intValue());
-//        assertEquals(500, servlet.parseAmount("five").intValue());
-//        assertEquals(600, servlet.parseAmount("six").intValue());
-//        assertEquals(700, servlet.parseAmount("seven").intValue());
-//        assertEquals(800, servlet.parseAmount("eight").intValue());
-//        assertEquals(900, servlet.parseAmount("nine").intValue());
 	}
 
-
-
+	@Test 
+	public void shouldParseCentValuesLessThanTen() throws Exception {
+		assertThat(parsedAmountOf("0"), is(equalTo(0)));
+		assertThat(parsedAmountOf("1"), is(equalTo(1)));
+		assertThat(parsedAmountOf("2"), is(equalTo(2)));
+		assertThat(parsedAmountOf("3"), is(equalTo(3)));
+		assertThat(parsedAmountOf("4"), is(equalTo(4)));
+		assertThat(parsedAmountOf("5"), is(equalTo(5)));
+		assertThat(parsedAmountOf("6"), is(equalTo(6)));
+		assertThat(parsedAmountOf("7"), is(equalTo(7)));
+		assertThat(parsedAmountOf("8"), is(equalTo(8)));
+		assertThat(parsedAmountOf("9"), is(equalTo(9)));
+	}
+	
+	@Test
+	public void shouldParseCentValuesTenToNinetyNine() throws Exception {
+		assertThat(parsedAmountOf("10"), is(equalTo(10)));
+		assertThat(parsedAmountOf("11"), is(equalTo(11)));
+		assertThat(parsedAmountOf("22"), is(equalTo(22)));
+		assertThat(parsedAmountOf("50"), is(equalTo(50)));
+		assertThat(parsedAmountOf("99"), is(equalTo(99)));
+	}
+	
+	@Test
+	public void shouldParseTwoDigitNumbersLessThanTen() throws Exception {
+		assertThat(parsedAmountOf("00"), is(equalTo(0)));
+		assertThat(parsedAmountOf("01"), is(equalTo(1)));
+		assertThat(parsedAmountOf("02"), is(equalTo(2)));
+		assertThat(parsedAmountOf("03"), is(equalTo(3)));
+		assertThat(parsedAmountOf("04"), is(equalTo(4)));
+		assertThat(parsedAmountOf("05"), is(equalTo(5)));
+		assertThat(parsedAmountOf("06"), is(equalTo(6)));
+		assertThat(parsedAmountOf("07"), is(equalTo(7)));
+		assertThat(parsedAmountOf("08"), is(equalTo(8)));
+		assertThat(parsedAmountOf("09"), is(equalTo(9)));
+	}
+	
+	@Test
+	public void shouldFindAndInString() throws Exception {
+		assertThat(foundAndIndexOf("Nine and 99/100"), is(equalTo(5)));
+	}
+	
+	private int foundAndIndexOf(String input) {
+		return parser.findAnd(input);
+	}
 	private int parsedAmountOf(String amount) {
-		return servlet.parseAmount(amount).intValue();
+		return parser.parseAmount(amount).intValue();
 	}
 
+	//check for other forms "and"
 }

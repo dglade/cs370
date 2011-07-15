@@ -1,44 +1,53 @@
 package edu.luc.clearing;
 
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.*;
 
+import java.io.BufferedReader;
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.StringReader;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 
 public class CheckClearingServletTest {
 	
 	private CheckClearingServlet servlet;
+	HttpServletResponse mockResponse;
+	HttpServletRequest mockRequest;
+	CharArrayWriter writer;
 	
 	@Before
-	public void setUp() {
+	public void setUp() throws IOException {
 		servlet = new CheckClearingServlet();
-	}
-	
-    @Test
-    public void shouldReturnAnEmptyObjectForAnEmptyRequest() throws Exception {
-        assertEquals("{}", servlet.response(new StringReader("[]")));
-    }
-    
-	@Test
-	public void shouldReturnCentsForCheckValues() throws Exception {
-        assertEquals("{\"one\":100}", servlet.response(new StringReader("[\"one\"]")));
-        assertEquals("{\"seven\":700}", servlet.response(new StringReader("[\"seven\"]")));
+		mockResponse = mock(HttpServletResponse.class);
+		mockRequest = mock(HttpServletRequest.class);
+		
+		BufferedReader reader = new BufferedReader(new StringReader("[]"));
+		writer = new CharArrayWriter();
+		
+		when(mockRequest.getReader()).thenReturn(reader);
+		when(mockResponse.getWriter()).thenReturn(new PrintWriter(writer));
 	}
 	
 	@Test
-	public void shouldIgnoreMalformedAmounts() throws Exception {
-		assertEquals("{}", servlet.response(new StringReader("[\"purple\"]")));
+	public void setsContentTypeForTheResponse() throws Exception {
+		servlet.doPost(mockRequest, mockResponse);
+		verify(mockResponse).setContentType("application/json");
 	}
 	
-	@Test
-	public void shouldIgnoreCase() throws Exception {
-		assertEquals(300, servlet.parseAmount("Three").intValue());
+	@Test 
+	public void writesAResponseObject() throws Exception {
+		servlet.doPost(mockRequest, mockResponse);
+		Assert.assertThat(writer.toString(), is(equalTo("{}")));
 	}
 	
-	@Test
-	public void shouldHandleZero() throws Exception {
-		assertEquals(0, servlet.parseAmount("zero").intValue());
-	}
+
 }
