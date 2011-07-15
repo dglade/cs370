@@ -23,5 +23,9 @@ public class CheckParserTest {
 	public void shouldHandleZero() throws Exception {
 		assertEquals(0, parser.parseAmount("zero").intValue());
 	}
-
+	
+	@Test
+	public void shouldHandleCompoundNumbers() throws Exception {
+		assertEquals(3300, parser.parseAmount("THIRTY-THREE").intValue());
+	}
 }
