@@ -25,6 +25,9 @@ public class RequestReaderTest {
         assertEquals("{\"one\":100}", reader.respond(new StringReader("[\"one\"]")));
         assertEquals("{\"seven\":700}", reader.respond(new StringReader("[\"seven\"]")));
         assertEquals("{\"twenty-two\":2200}", reader.respond(new StringReader("[\"twenty-two\"]")));
+        assertEquals("{\"thirty-seven and 27/100\":3727}", reader.respond(new StringReader("[\"thirty-seven and 27/100\"]")));
+        assertEquals("{\"thirty-seven dollars and 27/100\":3727}", reader.respond(new StringReader("[\"thirty-seven dollars and 27/100\"]")));
+        assertEquals("{\"one dollar and 100/100\":200}", reader.respond(new StringReader("[\"one dollar and 100/100\"]")));
 	}
 	
 	@Test
@@ -32,14 +35,8 @@ public class RequestReaderTest {
 		assertEquals("{}", reader.respond(new StringReader("[\"purple\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"purple-two\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"purple-twenty-two\"]")));
-		assertEquals("{}", reader.respond(new StringReader("[\"50/100\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"7/10\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"a/100\"]")));
+		assertEquals("{}", reader.respond(new StringReader("[\"Eighty and 9a/10\"]")));
 	}
-	
-	@Test
-	public void shouldIgnoreNonWholeDollarAmounts() throws Exception {	//for now!!!
-		assertEquals("{}", reader.respond(new StringReader("[\"twenty-three and 99/100\"]")));
-	}
-
 }

@@ -4,6 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.ArrayList;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,10 +14,15 @@ import edu.luc.clearing.CheckParser;
 public class AcceptanceTest {
 
 	private CheckParser parser;
+	private ArrayList<String> arrayList;
 
 	@Before
 	public void setUp() {
 		parser = new CheckParser();
+		arrayList = new ArrayList<String>();
+		arrayList.add("fifty-five");
+		arrayList.add("and");
+		arrayList.add("55/100");
 	}
 	
 	@Test
@@ -39,12 +46,12 @@ public class AcceptanceTest {
         assertThat(parsedAmountOf("twenty-three"), is(equalTo(2300)));
 	}
 	
-//	@Test 
-//	public void shouldParseValuesFromFractions() throws Exception {
-//        assertThat(parsedAmountOf("50/100"), is(equalTo(50)));
-//        assertThat(parsedAmountOf("0/100"), is(equalTo(0)));
-//        assertThat(parsedAmountOf("150/100"), is(equalTo(150)));
-//	}
+	@Test 
+	public void shouldParseValuesFromFractions() throws Exception {
+        assertThat(parsedAmountOf("50/100"), is(equalTo(50)));
+        assertThat(parsedAmountOf("0/100"), is(equalTo(0)));
+        assertThat(parsedAmountOf("150/100"), is(equalTo(150)));
+	}
 	
 	@Test 
 	public void shouldParseFractionsToCents() throws Exception {
@@ -59,36 +66,63 @@ public class AcceptanceTest {
 	}
 	
 	@Test
-	public void createArrayOfStringComponents() throws Exception {
-		assertThat(createdArray("Nine and 99/100").length, is(equalTo(3)));
-		assertThat(createdArray("Twenty-two and 10/100")[0], is(equalTo("Twenty-two")));
-		assertThat(createdArray("Fifty-one and 9/100")[1], is(equalTo("and")));
-		assertThat(createdArray("Ninety and 0/100")[2], is(equalTo("0/100")));
+	public void returnValueOfComplexString() throws Exception {
+		assertThat(convertedString("Ninety-nine and 99/100"), is(equalTo(9999)));
+		assertThat(convertedString("Fifty-four and 130/100"), is(equalTo(5530)));
+		assertThat(convertedString("Thirty and 0/100"), is(equalTo(3000)));
+		assertThat(convertedString("Zero and 100/100"), is(equalTo(100)));
+	}
+	
+	@Test
+	public void createArrayFromStringComponents() throws Exception {
+		assertThat(createdArray("Nine and 99/100").size(), is(equalTo(3)));
+		assertThat(createdArray("Twenty-two and 10/100").get(0), is(equalTo("Twenty-two")));
+		assertThat(createdArray("Fifty-one and 9/100").get(1), is(equalTo("and")));
+		assertThat(createdArray("Ninety and 0/100").get(2), is(equalTo("0/100")));
+	}
+	
+	@Test
+	public void convertArrayOfStringsToArrayOfIntegers() throws Exception {
+		assertThat(convertedArray(arrayList).size(), is(equalTo(3)));
+		assertThat(convertedArray(arrayList).get(0), is(equalTo(5500)));
+		assertThat(convertedArray(arrayList).get(2), is(equalTo(55)));
 	}
 	
 	@Test
 	public void shouldFindAndInString() throws Exception {
-		assertThat(foundAndIndexOf("Nine and 99/100"), is(equalTo(5)));
+		arrayList.add("dollar");
+		arrayList.add("dollars");
+		assertThat(removedWord("and", arrayList).size(), is(equalTo(4)));
+		assertThat(removedWord("dollar", arrayList).size(), is(equalTo(3)));
+		assertThat(removedWord("dollars", arrayList).size(), is(equalTo(2)));
+		assertThat(convertedArray(arrayList).get(0), is(equalTo(5500)));
+		assertThat(convertedArray(arrayList).get(1), is(equalTo(55)));
 	}
 	
 	
 	
-	
+	private int convertedString(String checkString) {
+		return parser.processCheckString(checkString);
+	}
 	
 	private int parsedCentsFromFraction(String fraction) throws Exception {
 		return parser.parseFractionToCents(fraction);
 	}
 	
-	private int foundAndIndexOf(String input) {
-		return parser.findAnd(input);
+	private ArrayList<String> removedWord(String word, ArrayList<String> input) {
+		return parser.removeWord(word, input);
 	}
 	
 	private int parsedAmountOf(String amount) {
 		return parser.parseAmount(amount).intValue();
 	}
 	
-	private String[] createdArray(String input) {
-		return parser.createArrayFromString(input);
+	private ArrayList<String> createdArray(String input) {
+		return parser.createArrayListFromString(input);
+	}
+	
+	private ArrayList<Integer> convertedArray(ArrayList<String> input) {
+		return parser.convertStringArrayListToIntegerArrayList(input);
 	}
 
 	//what about improper fractions?

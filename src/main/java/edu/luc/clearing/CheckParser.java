@@ -1,8 +1,8 @@
 package edu.luc.clearing;
 
-import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 public class CheckParser {
 
@@ -39,12 +39,48 @@ public class CheckParser {
 		AMOUNTS.put("ninety", 9000);
 	}
 	
+	public Integer processCheckString(String checkString) {
+		Integer total = 0;
+		checkString.toLowerCase();
+		ArrayList<String> inputArrayList = createArrayListFromString(checkString);
+		inputArrayList = removeWord("and", inputArrayList);
+		inputArrayList = removeWord("dollars", inputArrayList);
+		inputArrayList = removeWord("dollar", inputArrayList);
+		ArrayList<Integer> integerList = convertStringArrayListToIntegerArrayList(inputArrayList);
+		if (!integerList.contains(null)) {
+			for (Integer amount : integerList)
+				total += amount;
+			return total;
+		}
+		else return null;
+	}
+	
 	public Integer parseAmount(String amount) {
 		amount = amount.toLowerCase();
-		String[] CompoundNumberParts = amount.split("-");
-		if(CompoundNumberParts.length == 2 && AMOUNTS.containsKey(CompoundNumberParts[0]) && AMOUNTS.containsKey(CompoundNumberParts[1]))
-			return parseAmount(CompoundNumberParts[0]) + parseAmount(CompoundNumberParts[1]);
+		String[] compoundNumberParts = amount.split("-");
+		if(compoundNumberParts.length == 2 && AMOUNTS.containsKey(compoundNumberParts[0]) && AMOUNTS.containsKey(compoundNumberParts[1]))
+			return parseAmount(compoundNumberParts[0]) + parseAmount(compoundNumberParts[1]);
+		else if(amount.contains("/"))
+			return parseFractionToCents(amount);
 		else return AMOUNTS.get(amount.toLowerCase());
+	}
+	
+	public Integer parseFractionToCents(String fraction) {
+		Integer numerator = null;
+		Integer denominator = null;
+		String[] fractionComponents = fraction.split("/");
+		if (isNumeric(fractionComponents[0]) && isNumeric(fractionComponents[1])) {
+			numerator = Integer.valueOf(fractionComponents[0]);
+			denominator = Integer.valueOf(fractionComponents[1]);
+			if (denominator == 100) {
+				if (numerator < denominator)
+					return numerator % denominator;
+				else if (numerator == denominator)
+					return 100;
+				else return (numerator/denominator) * 100 + numerator%denominator;
+			}
+		}
+		return null;
 	}
 	
 	private boolean isNumeric(String amount) {
@@ -54,23 +90,24 @@ public class CheckParser {
 		return true;
 	}
 	
-	public Integer parseFractionToCents(String fraction) {
-		String[] fractionComponents = fraction.split("/");
-		Integer numerator = Integer.valueOf(fractionComponents[0]);
-		Integer denominator = Integer.valueOf(fractionComponents[1]);
-		if (numerator < denominator)
-			return numerator % denominator;
-		else if (numerator == denominator)
-			return 100;
-		else return (numerator/denominator) * 100 + numerator%denominator;
+	public ArrayList<String> createArrayListFromString(String input) {
+		ArrayList<String> stringArrayList = new ArrayList<String>();
+		String[] stringArray = input.split(" ");
+		for (String word : stringArray) {
+			stringArrayList.add(word);
+		}
+		return stringArrayList;
 	}
 	
-	public String[] createArrayFromString(String input) {
-		return input.split(" ");
+	public ArrayList<Integer> convertStringArrayListToIntegerArrayList(ArrayList<String> input) {
+		ArrayList<Integer> integerArray = new ArrayList<Integer>();
+		for (String word : input)
+			integerArray.add(parseAmount(word));
+		return integerArray;
 	}
 	
-	public Integer findAnd(String input) {
-		input.toLowerCase();
-		return input.indexOf("and");
+	public ArrayList<String> removeWord(String word, ArrayList<String> input) {
+		input.remove(word);
+		return input;
 	}
 }
