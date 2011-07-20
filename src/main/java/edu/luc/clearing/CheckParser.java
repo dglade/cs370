@@ -37,6 +37,11 @@ public class CheckParser {
 		AMOUNTS.put("seventy", 7000);
 		AMOUNTS.put("eighty", 8000);
 		AMOUNTS.put("ninety", 9000);
+		AMOUNTS.put("hundred", 10000);
+		AMOUNTS.put("thousand", 100000);
+		AMOUNTS.put("million", 100000000);
+//		AMOUNTS.put("billion", 100000000000);
+//		AMOUNTS.put("trillion", 100000000000000);
 	}
 	
 	public Integer processCheckString(String checkString) {

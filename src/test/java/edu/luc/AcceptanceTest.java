@@ -46,6 +46,19 @@ public class AcceptanceTest {
         assertThat(parsedAmountOf("twenty-three"), is(equalTo(2300)));
 	}
 	
+//	@Test
+//	public void shouldParseHundreds() throws Exception {
+//		assertThat(parsedAmountOf("One hundred"), is(equalTo(10000)));
+//		assertThat(parsedAmountOf("Nine hundred"), is(equalTo(90000)));
+//	}
+//	
+//	@Test
+//	public void shouldParseThousands() throws Exception {
+//		assertThat(parsedAmountOf("One thousand"), is(equalTo(100000)));
+//		assertThat(parsedAmountOf("Eight thousand"), is(equalTo(800000)));
+//		assertThat(parsedAmountOf("Ninety-nine thousand"), is(equalTo(9900000)));
+//	}
+	
 	@Test 
 	public void shouldParseValuesFromFractions() throws Exception {
         assertThat(parsedAmountOf("50/100"), is(equalTo(50)));
@@ -124,9 +137,5 @@ public class AcceptanceTest {
 	private ArrayList<Integer> convertedArray(ArrayList<String> input) {
 		return parser.convertStringArrayListToIntegerArrayList(input);
 	}
-
-	//what about improper fractions?
-	//check for other forms "and"
-	//test isNumeric
 
 }

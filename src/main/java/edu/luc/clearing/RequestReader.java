@@ -20,7 +20,11 @@ public class RequestReader {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		List<String> checks = gson.fromJson(requestData, requestType());
 		for(String amount : checks) {
-			map.put(amount, checkParser.processCheckString(amount));
+			Integer parsedValue = checkParser.processCheckString(amount);
+			if (parsedValue == null) {
+				System.err.println("Could not parse amount : " + amount);
+			}
+			map.put(amount, parsedValue);
 		}
 		return gson.toJson(map);
 	}

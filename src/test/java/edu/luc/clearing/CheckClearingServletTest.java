@@ -49,5 +49,9 @@ public class CheckClearingServletTest {
 		Assert.assertThat(writer.toString(), is(equalTo("{}")));
 	}
 	
-
+	@Test
+	public void returnsCheckAmountsInAJSONArray() throws Exception {
+		servlet.doGet(null, mockResponse);
+		Assert.assertThat(writer.toString(), is(equalTo("[]")));
+	}
 }
