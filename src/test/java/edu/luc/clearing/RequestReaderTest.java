@@ -38,5 +38,6 @@ public class RequestReaderTest {
 		assertEquals("{}", reader.respond(new StringReader("[\"7/10\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"a/100\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"Eighty and 9a/10\"]")));
+		assertEquals("{}", reader.respond(new StringReader("[\"Eighty and 9/10\"]")));
 	}
 }
