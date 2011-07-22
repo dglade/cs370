@@ -9,6 +9,10 @@ public class CheckParser {
 	private static final Map<String, Integer> AMOUNTS = new HashMap<String, Integer>();
 	
 	public CheckParser() {
+		AMOUNTS.put("cent", 1);
+		AMOUNTS.put("cent", 1);
+		AMOUNTS.put("dollar", 100);
+		AMOUNTS.put("dollars", 100);
 		AMOUNTS.put("zero", 0);
 		AMOUNTS.put("one", 100);
 		AMOUNTS.put("two", 200);
@@ -43,6 +47,31 @@ public class CheckParser {
 //		AMOUNTS.put("billion", 100000000000);
 //		AMOUNTS.put("trillion", 100000000000000);
 	}
+	
+	//if string is followed by cent(s), convert to number
+	//if string is followed by dollar(s), convert to number and multiply by 100
+	//"no" is the same as 0
+	//replace "-" with check for greater than, less than, 
+	
+//	public Integer newprocessCheckString(String checkString) {
+//		Integer total = 0;
+//		checkString.toLowerCase();
+//		String[] stringInput = checkString.split("and");
+//		if (stringInput.length == 2) {
+//			String[] dollarInput = stringInput[0].split("\\W");
+//			String[] centInput = stringInput[1].split("\\W");
+//		}
+//		else if (stringInput.length == 1) {
+//			String[] dollarInput = stringInput[0].split("\\W");
+//		}
+//		
+//		ArrayList<Integer> integerInput = new ArrayList<Integer>();
+//		
+//		for (String word : stringInput) {
+//			
+//		}
+//		
+//	}
 	
 	public Integer processCheckString(String checkString) {
 		Integer total = 0;

@@ -12,9 +12,13 @@ public class CheckClearingServlet extends HttpServlet {
 	private RequestReader requestReader;
 	private CheckHistory checkHistory;
 	
+	CheckClearingServlet(DataStoreAdapter dataStore) {
+		requestReader = new RequestReader(dataStore);
+		checkHistory = new CheckHistory(dataStore);
+	}
+	
 	public CheckClearingServlet() {
-		requestReader = new RequestReader();
-		checkHistory = new CheckHistory(new DataStoreAdapter());
+		this(new DataStoreAdapter());
 	}
 	
     public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {

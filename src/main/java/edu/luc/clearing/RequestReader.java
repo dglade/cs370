@@ -11,10 +11,13 @@ import com.google.gson.reflect.TypeToken;
 public class RequestReader {
 
 	private CheckParser checkParser;
+	private DataStoreAdapter dataStore;
 	
-	public RequestReader() {
+	public RequestReader(DataStoreAdapter dataStore) {
+		this.dataStore = dataStore;
 		checkParser = new CheckParser();
 	}
+	
 	public String respond(Reader requestData) {
 		Gson gson = new Gson();
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -25,6 +28,7 @@ public class RequestReader {
 				System.err.println("Could not parse amount : " + amount);
 			}
 			map.put(amount, parsedValue);
+			dataStore.saveRow("amount", amount);
 		}
 		return gson.toJson(map);
 	}

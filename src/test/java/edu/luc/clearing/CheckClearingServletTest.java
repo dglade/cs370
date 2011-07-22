@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 
 public class CheckClearingServletTest {
@@ -26,7 +27,8 @@ public class CheckClearingServletTest {
 	
 	@Before
 	public void setUp() throws IOException {
-		servlet = new CheckClearingServlet();
+		DataStoreAdapter datastore = Mockito.mock(DataStoreAdapter.class);
+		servlet = new CheckClearingServlet(datastore);
 		mockResponse = mock(HttpServletResponse.class);
 		mockRequest = mock(HttpServletRequest.class);
 		
