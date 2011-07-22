@@ -1,19 +1,22 @@
 package edu.luc.clearing;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.io.StringReader;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class RequestReaderTest {
 
 	private RequestReader reader;
+	private DataStoreAdapter dataStore;
 	
 	@Before
 	public void setUp() {
-		reader = new RequestReader();
+		dataStore = Mockito.mock(DataStoreAdapter.class);
+		reader = new RequestReader(dataStore);
 	}
     @Test
     public void shouldReturnAnEmptyObjectForAnEmptyRequest() throws Exception {
@@ -38,5 +41,12 @@ public class RequestReaderTest {
 		assertEquals("{}", reader.respond(new StringReader("[\"7/10\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"a/100\"]")));
 		assertEquals("{}", reader.respond(new StringReader("[\"Eighty and 9a/10\"]")));
+	}
+	
+	@Test
+	public void shouldSaveAmountsInDataStore() throws Exception {
+		reader.respond(new StringReader("[\"one\"]"));
+		Mockito.verify(dataStore).saveRow("amount", "one");
+		
 	}
 }
