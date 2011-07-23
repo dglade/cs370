@@ -17,4 +17,4 @@ fi
 
 
 
-curl -s -H Content-Type:application/json -d '["forty-four"]' http://localhost:8085/checkclearing
+curl -s -H Content-Type:application/json -d '["forty purple dollars and 23 cents"]' http://localhost:8085/checkclearing

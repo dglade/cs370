@@ -25,9 +25,12 @@ public class RequestReaderTest {
     
 	@Test
 	public void shouldReturnCentsForCheckValues() throws Exception {
-        assertEquals("{\"one\":100}", reader.respond(new StringReader("[\"one\"]")));
-        assertEquals("{\"seven\":700}", reader.respond(new StringReader("[\"seven\"]")));
-        assertEquals("{\"twenty-two\":2200}", reader.respond(new StringReader("[\"twenty-two\"]")));
+        assertEquals("{\"one dollar\":100}", reader.respond(new StringReader("[\"one dollar\"]")));
+        assertEquals("{\"seven dollars 10 cents\":710}", reader.respond(new StringReader("[\"seven dollars 10 cents\"]")));
+        assertEquals("{\"seventy seven dollars thirty cents\":7730}", reader.respond(new StringReader("[\"seventy seven dollars thirty cents\"]")));
+        assertEquals("{\"94 dollars six cents\":9406}", reader.respond(new StringReader("[\"94 dollars six cents\"]")));
+        assertEquals("{\"forty 4 dollars six cents\":4406}", reader.respond(new StringReader("[\"forty 4 dollars six cents\"]")));
+        assertEquals("{\"twenty-two dollars\":2200}", reader.respond(new StringReader("[\"twenty-two dollars\"]")));
         assertEquals("{\"thirty-seven and 27/100\":3727}", reader.respond(new StringReader("[\"thirty-seven and 27/100\"]")));
         assertEquals("{\"thirty-seven dollars and 27/100\":3727}", reader.respond(new StringReader("[\"thirty-seven dollars and 27/100\"]")));
         assertEquals("{\"one dollar and 100/100\":200}", reader.respond(new StringReader("[\"one dollar and 100/100\"]")));
