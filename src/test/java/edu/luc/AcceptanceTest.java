@@ -2,6 +2,7 @@ package edu.luc;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.ArrayList;
@@ -14,128 +15,105 @@ import edu.luc.clearing.CheckParser;
 public class AcceptanceTest {
 
 	private CheckParser parser;
-	private ArrayList<String> arrayList;
+	private String[] array = {"fifty", "five", "55"};
 
 	@Before
 	public void setUp() {
 		parser = new CheckParser();
-		arrayList = new ArrayList<String>();
-		arrayList.add("fifty-five");
-		arrayList.add("and");
-		arrayList.add("55/100");
-	}
-	
-	@Test
-	public void shouldParseWholeValuesLessThanTen() throws Exception {
-        assertThat(parsedAmountOf("one"), is(equalTo(100)));
-        assertThat(parsedAmountOf("two"), is(equalTo(200)));
-        assertThat(parsedAmountOf("three"), is(equalTo(300)));
-        assertThat(parsedAmountOf("four"), is(equalTo(400)));
-        assertThat(parsedAmountOf("five"), is(equalTo(500)));
-        assertThat(parsedAmountOf("six"), is(equalTo(600)));
-        assertThat(parsedAmountOf("seven"), is(equalTo(700)));
-        assertThat(parsedAmountOf("eight"), is(equalTo(800)));
-        assertThat(parsedAmountOf("nine"), is(equalTo(900)));
-        assertThat(parsedAmountOf("ten"), is(equalTo(1000)));
-	}
-	
-	@Test
-	public void shouldParseCompoundNumbersLessThanOneHundred() throws Exception {
-        assertThat(parsedAmountOf("fifty-five"), is(equalTo(5500)));
-        assertThat(parsedAmountOf("ninety-nine"), is(equalTo(9900)));
-        assertThat(parsedAmountOf("twenty-three"), is(equalTo(2300)));
-	}
-	
-//	@Test
-//	public void shouldParseHundreds() throws Exception {
-//		assertThat(parsedAmountOf("One hundred"), is(equalTo(10000)));
-//		assertThat(parsedAmountOf("Nine hundred"), is(equalTo(90000)));
-//	}
-//	
-//	@Test
-//	public void shouldParseThousands() throws Exception {
-//		assertThat(parsedAmountOf("One thousand"), is(equalTo(100000)));
-//		assertThat(parsedAmountOf("Eight thousand"), is(equalTo(800000)));
-//		assertThat(parsedAmountOf("Ninety-nine thousand"), is(equalTo(9900000)));
-//	}
-	
-	@Test 
-	public void shouldParseValuesFromFractions() throws Exception {
-        assertThat(parsedAmountOf("50/100"), is(equalTo(50)));
-        assertThat(parsedAmountOf("0/100"), is(equalTo(0)));
-        assertThat(parsedAmountOf("150/100"), is(equalTo(150)));
-	}
-	
-	@Test 
-	public void shouldParseFractionsToCents() throws Exception {
-		assertThat(parsedCentsFromFraction("0/100"), is(equalTo(0)));
-		assertThat(parsedCentsFromFraction("00/100"), is(equalTo(0)));
-		assertThat(parsedCentsFromFraction("1/100"), is(equalTo(1)));
-		assertThat(parsedCentsFromFraction("01/100"), is(equalTo(1)));
-		assertThat(parsedCentsFromFraction("50/100"), is(equalTo(50)));
-		assertThat(parsedCentsFromFraction("99/100"), is(equalTo(99)));
-		assertThat(parsedCentsFromFraction("100/100"), is(equalTo(100)));
-		assertThat(parsedCentsFromFraction("130/100"), is(equalTo(130)));
 	}
 	
 	@Test
 	public void returnValueOfComplexString() throws Exception {
+		ArrayList<String> inputs = new ArrayList<String>();
+		assertThat(convertedString("sixty nine dollars twenty four cents"), is(equalTo(6924)));
+		assertThat(convertedString("sixty nine dollars and 28 cents"), is(equalTo(6928)));
+		assertThat(convertedString("59 dollars and one cent"), is(equalTo(5901))); 
+		assertThat(convertedString("59 dollars and 1/100"), is(equalTo(5901)));
+		assertThat(convertedString("20 dollar and 5 cent"), is(equalTo(2005)));
+		assertThat(convertedString("Four dollars and no cents" ), is(equalTo(400)));
+		assertThat(convertedString("fifty five and twelve cents" ), is(equalTo(5512)));
+		assertThat(convertedString("Three dollars and 0/100 cents"), is(equalTo(300)));
+		assertThat(convertedString("five and no cents"), is(equalTo(500)));
+		assertThat(convertedString("one dollars and no cents"), is(equalTo(100)));
+		assertThat(convertedString("eighty five and 12 cents"), is(equalTo(8512)));
+		assertThat(convertedString("eighty five dollars 12 cents"), is(equalTo(8512)));
+		assertThat(convertedString("fifty cent"), is(equalTo(50)));
+		assertThat(convertedString("1 dollar and one cent"), is(equalTo(101)));
+		assertThat(convertedString("ten cent"), is(equalTo(10)));
+		assertThat(convertedString("sixty nine dollars and 69 cents"), is(equalTo(6969)));
+		assertThat(convertedString("1 dollar and 1 cent"), is(equalTo(101)));
+		assertThat(convertedString("one dollar and zero cents"), is(equalTo(100)));
+		assertThat(convertedString("one dollars and one cent"), is(equalTo(101)));
+		assertThat(convertedString("6 dollars zero cents"), is(equalTo(600)));
+		assertThat(convertedString("91 dollars and 43 cents"), is(equalTo(9143)));
+		assertThat(convertedString("one cent"), is(equalTo(1)));
+		assertThat(convertedString("SEVEN dollars no cents"), is(equalTo(700)));
+		assertThat(convertedString("6 dollars and 0 cents"), is(equalTo(600)));
+		assertThat(convertedString("one dollar and 1 cent"), is(equalTo(101)));
+		assertThat(convertedString("one dollar and one cents"), is(equalTo(101)));
+		assertThat(convertedString("forty five cents"), is(equalTo(45)));
+		assertThat(convertedString("one dollars and one cents"), is(equalTo(101)));
+		assertThat(convertedString("one dollars and one cent"), is(equalTo(101)));
+		assertThat(convertedString("6 dollars"), is(equalTo(600)));
+		assertThat(convertedString("twelve dollar and eighty Seven cents"), is(equalTo(1287)));
+		assertThat(convertedString("twenty dollar and 5 cent"), is(equalTo(2005)));
+		assertThat(convertedString("sixty eight and TWENTY ONE CENTS"), is(equalTo(6821)));
+		assertThat(convertedString("one dollar and zero cents"), is(equalTo(100)));
+		assertThat(convertedString("50 six and 12/100"), is(equalTo(5612)));
+		assertThat(convertedString("1 dollars and one cents"), is(equalTo(101)));
+		assertThat(convertedString("Two dollars and twenty one cents"), is(equalTo(221)));
+		assertThat(convertedString("50 dollars and 11 cents"), is(equalTo(5011)));
+		assertThat(convertedString("FIVE DOLLARS AND TWELVE CENTS"), is(equalTo(512)));
+		assertThat(convertedString("fifty nine dollars and 1 cent"), is(equalTo(5901)));
+		assertThat(convertedString("ten cents"), is(equalTo(10)));
+		assertThat(convertedString("6 dollars and 65/100"), is(equalTo(665)));
 		assertThat(convertedString("Ninety-nine and 99/100"), is(equalTo(9999)));
 		assertThat(convertedString("Fifty-four and 130/100"), is(equalTo(5530)));
 		assertThat(convertedString("Thirty and 0/100"), is(equalTo(3000)));
 		assertThat(convertedString("Zero and 100/100"), is(equalTo(100)));
+		assertThat(convertedString("Zero and zero cents"), is(equalTo(0)));
+	}
+	
+	@Test
+	public void returnNullForMalformedString() throws Exception {
+		assertThat(convertedString("6"), is(nullValue()));
+		assertThat(convertedString("purple"), is(nullValue()));
+		assertThat(convertedString("purple dollars"), is(nullValue()));
+		assertThat(convertedString("purple dollars and blue cents"), is(nullValue()));
+		assertThat(convertedString("6 dollars and blue cents"), is(nullValue()));
+		assertThat(convertedString("purple dollars and 6 cents"), is(nullValue()));
 	}
 	
 	@Test
 	public void createArrayFromStringComponents() throws Exception {
-		assertThat(createdArray("Nine and 99/100").size(), is(equalTo(3)));
-		assertThat(createdArray("Twenty-two and 10/100").get(0), is(equalTo("Twenty-two")));
-		assertThat(createdArray("Fifty-one and 9/100").get(1), is(equalTo("and")));
-		assertThat(createdArray("Ninety and 0/100").get(2), is(equalTo("0/100")));
+		assertThat(createdArray("Nine and 99/100").length, is(equalTo(2)));
+		assertThat(createdArray("Twenty-two and 10/100")[0], is(equalTo("twenty two")));
+		assertThat(createdArray("Fifty-one and 9/100")[1], is(equalTo("9")));
+		assertThat(createdArray("Ninety and 0/100")[1], is(equalTo("0")));
 	}
 	
 	@Test
 	public void convertArrayOfStringsToArrayOfIntegers() throws Exception {
-		assertThat(convertedArray(arrayList).size(), is(equalTo(3)));
-		assertThat(convertedArray(arrayList).get(0), is(equalTo(5500)));
-		assertThat(convertedArray(arrayList).get(2), is(equalTo(55)));
+		assertThat(convertedArray(array).size(), is(equalTo(3)));
+		assertThat(convertedArray(array).get(0), is(equalTo(50)));
+		assertThat(convertedArray(array).get(1), is(equalTo(5)));
+		assertThat(convertedArray(array).get(2), is(equalTo(55)));
 	}
 	
-	@Test
-	public void shouldFindAndInString() throws Exception {
-		arrayList.add("dollar");
-		arrayList.add("dollars");
-		assertThat(removedWord("and", arrayList).size(), is(equalTo(4)));
-		assertThat(removedWord("dollar", arrayList).size(), is(equalTo(3)));
-		assertThat(removedWord("dollars", arrayList).size(), is(equalTo(2)));
-		assertThat(convertedArray(arrayList).get(0), is(equalTo(5500)));
-		assertThat(convertedArray(arrayList).get(1), is(equalTo(55)));
-	}
-	
-	
-	
-	private int convertedString(String checkString) {
+	private Integer convertedString(String checkString) {
 		return parser.processCheckString(checkString);
 	}
 	
-	private int parsedCentsFromFraction(String fraction) throws Exception {
-		return parser.parseFractionToCents(fraction);
+	private Integer parsedAmountOf(ArrayList<Integer> amounts) {
+		return parser.parseAmount(amounts).intValue();
 	}
 	
-	private ArrayList<String> removedWord(String word, ArrayList<String> input) {
-		return parser.removeWord(word, input);
+	private String[] createdArray(String input) {
+		return parser.processString(input);
 	}
 	
-	private int parsedAmountOf(String amount) {
-		return parser.parseAmount(amount).intValue();
-	}
-	
-	private ArrayList<String> createdArray(String input) {
-		return parser.createArrayListFromString(input);
-	}
-	
-	private ArrayList<Integer> convertedArray(ArrayList<String> input) {
-		return parser.convertStringArrayListToIntegerArrayList(input);
+	private ArrayList<Integer> convertedArray(String[] input) {
+		return parser.stringArrToIntegerArr(input);
 	}
 
 }

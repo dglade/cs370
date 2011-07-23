@@ -33,6 +33,7 @@ public class RequestReaderTest {
         assertEquals("{\"one dollar and 100/100\":200}", reader.respond(new StringReader("[\"one dollar and 100/100\"]")));
 	}
 	
+	
 	@Test
 	public void shouldIgnoreMalformedAmounts() throws Exception {
 		assertEquals("{}", reader.respond(new StringReader("[\"purple\"]")));

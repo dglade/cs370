@@ -16,16 +16,17 @@ public class CheckParserTest {
 	
 	@Test
 	public void shouldIgnoreCase() throws Exception {
-		assertEquals(300, parser.parseAmount("Three").intValue());
+		
+		assertEquals(300, parser.processCheckString("Three dollars").intValue());
 	}
 	
 	@Test
 	public void shouldHandleZero() throws Exception {
-		assertEquals(0, parser.parseAmount("zero").intValue());
+		assertEquals(0, parser.processCheckString("zero dollars").intValue());
 	}
 	
 	@Test
 	public void shouldHandleCompoundNumbers() throws Exception {
-		assertEquals(3300, parser.parseAmount("THIRTY-THREE").intValue());
+		assertEquals(3300, parser.processCheckString("THIRTY-THREE AND 0/100 CENTS").intValue());
 	}
 }

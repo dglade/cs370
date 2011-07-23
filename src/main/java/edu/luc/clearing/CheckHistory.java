@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.appengine.api.datastore.DatastoreService;
 import com.google.gson.Gson;
 
 public class CheckHistory {
@@ -19,7 +18,6 @@ public class CheckHistory {
 	}
 	
 	public String getAmounts() {
-		//Query q = new Query("Person");
 		Set<String> amounts = new HashSet<String>();
 		List<Map<String, Object>> runQuery = storeAdapter.runQuery("Checks");
 		for(Map<String, Object> properties : runQuery) {
