@@ -14,7 +14,3 @@ if [ "$response" != '{"one":100}' ]; then
 else
 	echo "Test succeeded"
 fi
-
-
-
-curl -s -H Content-Type:application/json -d '["forty-four"]' http://localhost:8085/checkclearing

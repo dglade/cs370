@@ -118,10 +118,11 @@ public class CheckParser {
 		String centSide = null;
 		input = input.toLowerCase();
 		input = input.replace('-', ' ');
-		if (!(input.contains("dollars") || input.contains("dollar") || 
-			input.contains("and") || input.contains("cent") || input.contains("cents"))) {
-			String[] nullResult = {null, null};
-			return nullResult;
+		if (!(input.contains("dollars") || input.contains("dollar") || input.contains("and")
+				|| input.contains("cent") || input.contains("cents") || input.contains("/100"))) {
+			dollarSide = input;
+			String[] result = {dollarSide, centSide};
+			return result;
 		}
 			
 		//create normal form of [dollars] and [cents]

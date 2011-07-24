@@ -72,11 +72,15 @@ public class AcceptanceTest {
 		assertThat(convertedString("Thirty and 0/100"), is(equalTo(3000)));
 		assertThat(convertedString("Zero and 100/100"), is(equalTo(100)));
 		assertThat(convertedString("Zero and zero cents"), is(equalTo(0)));
+		assertThat(convertedString("Six"), is(equalTo(600)));
+		assertThat(convertedString("Sixty five"), is(equalTo(6500)));
+		assertThat(convertedString("Sixty-four"), is(equalTo(6400)));
+		assertThat(convertedString("64/100"), is(equalTo(64)));
+
 	}
 	
 	@Test
 	public void returnNullForMalformedString() throws Exception {
-		assertThat(convertedString("6"), is(nullValue()));
 		assertThat(convertedString("purple"), is(nullValue()));
 		assertThat(convertedString("purple dollars"), is(nullValue()));
 		assertThat(convertedString("purple dollars and blue cents"), is(nullValue()));
