@@ -36,7 +36,7 @@ fi
 
 server_status=1
 echo -n "Waiting for local server to start..."
-while [ ! server_status -gt 0 ]; do
+while [ ! $server_status -gt 0 ]; do
   curl http://localhost:8085
   server_status=$?
   sleep 1
