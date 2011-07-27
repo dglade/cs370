@@ -3,6 +3,7 @@
 function cleanup {
   kill $server_pid
   rm gradle.properties
+  exit 0
 }
 
 trap "cleanup" INT TERM EXIT
@@ -75,7 +76,7 @@ rm gradle.properties
 
 timestamp=`date "+%Y-%m-%d_%H_%M_%S"`
 echo $timestamp
-git tag DEPLOY $timestamp
+git tag DEPLOY_$timestamp
 
 echo "Exiting..."
 exit 0
