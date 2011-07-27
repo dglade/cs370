@@ -63,6 +63,7 @@ else
 fi
 
 kill $server_pid
+wait $server_pid
 
 echo "Build successful! Enter AppEngine password to deploy"
 stty -echo
