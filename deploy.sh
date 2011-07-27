@@ -8,8 +8,8 @@ function unknown_files {
 }
 
 function uncommitted_changes {
-  uncommited_change_count=`git diff HEAD --shortstat | wc -l`
-  [[ "$changes_committed" == "" ]]
+  count=`git diff HEAD --shortstat | wc -l`
+  [[ "$count" -gt 0 ]]
 }
 
 if unknown_files; then
@@ -19,6 +19,11 @@ fi
 
 if uncommitted_changes; then
   echo "Uncommitted files in project!"
+  exit 1
+fi
+
+gradle clean build
+if [ "$?" -gt 0 }; then
   exit 1
 fi
 
