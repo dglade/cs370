@@ -23,7 +23,14 @@ if uncommitted_changes; then
 fi
 
 gradle clean build
-if [ "$?" -gt 0 }; then
+if [ "$?" -gt 0 ]; then
+  exit 1
+fi
+
+gradle gaeRun &> /dev/null &
+server_pid=$!
+if [ "$?" -gt 0 ]; then
+  echo "Server fialed to start"
   exit 1
 fi
 
