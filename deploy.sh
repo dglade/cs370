@@ -5,7 +5,7 @@ function cleanup {
   rm gradle.properties
 }
 
-term "cleanup" INT TERM EXIT
+trap "cleanup" INT TERM EXIT
 
 function unknown_files {
   unknown_file_count=`git status --porcelain | grep "^??" | wc -l`
@@ -42,7 +42,7 @@ fi
 
 server_status=1
 echo -n "Waiting for local server to start..."
-while [ ! $server_status -gt 0 ]; do
+while [ $server_status -gt 0 ]; do
   echo -n
   curl http://localhost:8085
   server_status=$?
@@ -68,6 +68,7 @@ stty -echo
 read -p "Password: " password
 echo
 stty echo
+
 echo "gaePassword=$password" > gradle.properties
 gradle gaeUpload
 rm gradle.properties
@@ -78,17 +79,4 @@ git tag DEPLOY $timestamp
 
 echo "Exiting..."
 exit 0
-
-#curl -s -H Content-Type:application/json -d '["one"]' http://$server/checkclearing
-
-#history=`curl http://$server/checkclearing`
-#response=`curl -s -H Content-Type:application/json -d "$history" http://$server/checkclearing`
-
-#if [ "$response" != '{"one":100}' ]; then
-#	echo $response
-#	echo "TEST FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-#	exit 1
-#else
-#	echo "Test succeeded"
-#fi
 
