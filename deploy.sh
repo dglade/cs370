@@ -1,6 +1,11 @@
 #!/bin/bash
 
-server=${1-localhost:8085}	#take the first parameter
+function cleanup {
+  kill $server_pid
+  rm gradle.properties
+}
+
+term "cleanup" INT TERM EXIT
 
 function unknown_files {
   unknown_file_count=`git status --porcelain | grep "^??" | wc -l`
@@ -30,6 +35,7 @@ fi
 gradle gaeRun &
 server_pid=$!
 if [ "$?" -gt 0 ]; then
+  #add count to while loop for optional timeout
   echo "Server fialed to start"
   exit 1
 fi
@@ -37,16 +43,41 @@ fi
 server_status=1
 echo -n "Waiting for local server to start..."
 while [ ! $server_status -gt 0 ]; do
+  echo -n
   curl http://localhost:8085
   server_status=$?
   sleep 1
 done
 
+history=`curl http://dgladecs370.appspot.com/checkclearing`
+response=`curl -s -H Content-Type:application/json -d "$history" http://localhost:8085/checkclearing`
+
+echo $response | python -mjson.tool > /dev/null
+if [ "$?" -eq 0 ]; then
+  echo "Response is valid JSON"
+else
+  echo "Response is NOT valid JSON"
+  echo $response
+  exit 1
+fi
+
 kill $server_pid
+
+echo "Build successful! Enter AppEngine password to deploy"
+stty -echo
+read -p "Password: " password
+echo
+stty echo
+echo "gaePassword=$password" > gradle.properties
+gradle gaeUpload
+rm gradle.properties
+
+timestamp=`date "+%Y-%m-%d_%H_%M_%S"`
+echo $timestamp
+git tag DEPLOY $timestamp
 
 echo "Exiting..."
 exit 0
- 
 
 #curl -s -H Content-Type:application/json -d '["one"]' http://$server/checkclearing
 
@@ -60,3 +91,4 @@ exit 0
 #else
 #	echo "Test succeeded"
 #fi
+
