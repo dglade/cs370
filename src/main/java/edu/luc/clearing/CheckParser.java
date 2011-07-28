@@ -123,10 +123,6 @@ public class CheckParser {
 		if (input.contains("$"))
 			input = input.replace("$", "");
 		
-		//replace cent sign with "cents"
-		if (input.contains(" \\233"))
-			input = input.replace(" \\233", " cents");
-
 		if (!(input.contains("dollars") || input.contains("dollar") || input.contains("and")
 				|| input.contains("cent") || input.contains("cents") || input.contains("/100"))) {
 			dollarSide = input;
