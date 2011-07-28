@@ -76,7 +76,9 @@ public class AcceptanceTest {
 		assertThat(convertedString("Sixty five"), is(equalTo(6500)));
 		assertThat(convertedString("Sixty-four"), is(equalTo(6400)));
 		assertThat(convertedString("64/100"), is(equalTo(64)));
-
+		assertThat(convertedString("$60 four + 32 cents"), is(equalTo(6432)));
+		assertThat(convertedString("twenty-four + 32/100"), is(equalTo(2432)));
+		assertThat(convertedString("22 + 46/100"), is(equalTo(2246)));
 	}
 	
 	@Test
