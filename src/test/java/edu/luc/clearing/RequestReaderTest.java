@@ -1,6 +1,7 @@
 package edu.luc.clearing;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 import java.io.StringReader;
 
@@ -12,11 +13,13 @@ public class RequestReaderTest {
 
 	private RequestReader reader;
 	private DataStoreAdapter dataStore;
+	private Clock clock;
 	
 	@Before
 	public void setUp() {
 		dataStore = Mockito.mock(DataStoreAdapter.class);
-		reader = new RequestReader(dataStore);
+		clock = Mockito.mock(Clock.class);
+		reader = new RequestReader(dataStore, clock);
 	}
     @Test
     public void shouldReturnAnEmptyObjectForAnEmptyRequest() throws Exception {
@@ -52,6 +55,13 @@ public class RequestReaderTest {
 	public void shouldSaveAmountsInDataStore() throws Exception {
 		reader.respond(new StringReader("[\"one\"]"));
 		Mockito.verify(dataStore).saveRow("amount", "one");
-		
+	}
+	
+	@Test
+	public void shouldShortCircuitTheResponseIfItTakeslongerThan25Seconds() throws Exception {
+		long now = System.currentTimeMillis();
+		when(clock.currentTime()).thenReturn(now, now + 23 * 1000, now + 26 * 1000);
+        String response = reader.respond(new StringReader("[\"one\", \"two\", \"three\"]"));
+        assertEquals("{\"two\":200,\"one\":100}", response);
 	}
 }

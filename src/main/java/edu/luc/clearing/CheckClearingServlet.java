@@ -13,7 +13,7 @@ public class CheckClearingServlet extends HttpServlet {
 	private CheckHistory checkHistory;
 	
 	CheckClearingServlet(DataStoreAdapter dataStore) {
-		requestReader = new RequestReader(dataStore);
+		requestReader = new RequestReader(dataStore, new SystemClock());
 		checkHistory = new CheckHistory(dataStore);
 	}
 	
@@ -29,7 +29,6 @@ public class CheckClearingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
     		throws ServletException, IOException {
-    	resp.getWriter().print(checkHistory.getAmounts());
+    	resp.getWriter().print(checkHistory.getAmounts(req.getParameter("limit")));
     }
-
 }

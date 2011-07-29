@@ -53,7 +53,14 @@ public class CheckClearingServletTest {
 	
 	@Test
 	public void returnsCheckAmountsInAJSONArray() throws Exception {
-		servlet.doGet(null, mockResponse);
+		servlet.doGet(mockRequest, mockResponse);
 		Assert.assertThat(writer.toString(), is(equalTo("[]")));
+	}
+	
+	@Test
+	public void canLimitTheNumberOfCheckAmountsReturned() throws Exception {
+		when(mockRequest.getParameter("limit")).thenReturn("1000");
+		servlet.doGet(mockRequest,  mockResponse);
+		verify(mockRequest).getParameter("limit");
 	}
 }
