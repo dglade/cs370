@@ -45,7 +45,7 @@ public class CheckHistoryTest {
 		checks.add(createCheck("amount", "one"));
 		checks.add(createCheck("amount", "two"));
 		checks.add(createCheck("amount", "three"));
-		assertEquals("[\"one\",\"two\"]", history.getAmounts("2"));
+		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
 	}
 	
 	public Map<String, Object> createCheck(String amount, Object number) {
