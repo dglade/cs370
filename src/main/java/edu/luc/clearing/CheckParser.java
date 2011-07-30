@@ -131,6 +131,8 @@ public class CheckParser {
 			input = input.replace(" --- ", " and ");
 		else if (input.contains(" , "))
 			input = input.replace(" , ", " and ");
+		else if (input.contains(", "))
+			input = input.replace(", ", " and ");
 		
 		//remove hyphens
 		input = input.replace('-', ' ');
