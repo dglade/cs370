@@ -117,7 +117,8 @@ public class CheckParser {
 		String dollarSide = null;
 		String centSide = null;
 		input = input.toLowerCase();
-		
+		input = input.trim();
+		input = input.replaceAll("\\b\\s{2,}\\b", " ");		
 		//replace "+ / & / ~ / -- / ---" with "and"
 		if (input.contains(" + "))
 			input = input.replace(" + ", " and ");
