@@ -118,7 +118,7 @@ public class CheckParser {
 		String centSide = null;
 		input = input.toLowerCase();
 		input = input.trim();
-		input = input.replaceAll("\\s+", " "};		
+		input = input.replaceAll("\\s+", " ");		
 		//replace "+ / & / ~ / -- / ---" with "and"
 		if (input.contains(" + "))
 			input = input.replace(" + ", " and ");
