@@ -117,6 +117,22 @@ public class CheckParser {
 		String dollarSide = null;
 		String centSide = null;
 		input = input.toLowerCase();
+		
+		//replace "+ / & / ~ / -- / ---" with "and"
+		if (input.contains(" + "))
+			input = input.replace(" + ", " and ");
+		else if (input.contains(" & "))
+			input = input.replace(" & ", " and ");
+		else if (input.contains(" ~ "))
+			input = input.replace(" ~ ", " and ");
+		else if (input.contains(" -- "))
+			input = input.replace(" -- ", " and ");
+		else if (input.contains(" --- "))
+			input = input.replace(" --- ", " and ");
+		else if (input.contains(" , "))
+			input = input.replace(" , ", " and ");
+		
+		//remove hyphens
 		input = input.replace('-', ' ');
 		
 		//remove "$" sign
@@ -129,10 +145,6 @@ public class CheckParser {
 			String[] result = {dollarSide, centSide};
 			return result;
 		}
-		
-		//replace "+" with "and"
-		if (input.contains(" + "))
-			input = input.replace(" + ", " and ");
 		
 		//create normal form of [dollars] and [cents]
 		if (input.contains("dollars") && input.contains("and"))

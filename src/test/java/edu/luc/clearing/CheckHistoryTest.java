@@ -1,11 +1,9 @@
 package edu.luc.clearing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Before;
@@ -47,7 +45,7 @@ public class CheckHistoryTest {
 		checks.add(createCheck("amount", "one"));
 		checks.add(createCheck("amount", "two"));
 		checks.add(createCheck("amount", "three"));
-		assertEquals("[\"two\",\"one\"]", history.getAmounts("2"));
+		assertEquals("[\"one\",\"two\"]", history.getAmounts("2"));
 	}
 	
 	public Map<String, Object> createCheck(String amount, Object number) {

@@ -62,6 +62,6 @@ public class RequestReaderTest {
 		long now = System.currentTimeMillis();
 		when(clock.currentTime()).thenReturn(now, now + 23 * 1000, now + 26 * 1000);
         String response = reader.respond(new StringReader("[\"one\", \"two\", \"three\"]"));
-        assertEquals("{\"two\":200,\"one\":100}", response);
+        assertEquals("{\"one\":100,\"two\":200}", response);
 	}
 }

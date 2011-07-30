@@ -79,6 +79,11 @@ public class AcceptanceTest {
 		assertThat(convertedString("$60 four + 32 cents"), is(equalTo(6432)));
 		assertThat(convertedString("twenty-four + 32/100"), is(equalTo(2432)));
 		assertThat(convertedString("22 + 46/100"), is(equalTo(2246)));
+		assertThat(convertedString("$45 ~ 46/100"), is(equalTo(4546)));
+		assertThat(convertedString("80 two , 46/100 cents"), is(equalTo(8246)));
+		assertThat(convertedString("sixty-eight dollars --- 4/100 cents"), is(equalTo(6804)));
+		assertThat(convertedString("$forty 5 ~ 16 cents"), is(equalTo(4516)));
+		assertThat(convertedString("25 -- 47/100"), is(equalTo(2547)));
 	}
 	
 	@Test
