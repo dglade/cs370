@@ -23,72 +23,133 @@ public class AcceptanceTest {
 	}
 	
 	@Test
-	public void returnValueOfComplexString() throws Exception {
-		ArrayList<String> inputs = new ArrayList<String>();
-		assertThat(convertedString("sixty nine dollars twenty four cents"), is(equalTo(6924)));
+	public void returnsValueOfSimpleDollarAmount() throws Exception {
+		assertThat(convertedString("6"), is(equalTo(600)));
+		assertThat(convertedString("SIX"), is(equalTo(600)));
+		assertThat(convertedString("16"), is(equalTo(1600)));
+		assertThat(convertedString("Sixteen"), is(equalTo(1600)));
+		assertThat(convertedString("24"), is(equalTo(2400)));
+		assertThat(convertedString("Twenty-four"), is(equalTo(2400)));
+	}
+	
+	@Test
+	public void returnsValueOfDollarOrDollarSign() throws Exception {
+		assertThat(convertedString("$10"), is(equalTo(1000)));
+		assertThat(convertedString("$TEN"), is(equalTo(1000)));
+		assertThat(convertedString("10 dollars"), is(equalTo(1000)));
+		assertThat(convertedString("10 dollar"), is(equalTo(1000)));
+		assertThat(convertedString("ten dollar"), is(equalTo(1000)));
+		assertThat(convertedString("ten dollars"), is(equalTo(1000)));
+	}
+	
+	@Test
+	public void returnsValueOfOnlyCentAmount() throws Exception {
+		assertThat(convertedString("10 cents"), is(equalTo(10)));
+		assertThat(convertedString("10/100"), is(equalTo(10)));
+		assertThat(convertedString("10/100 cents"), is(equalTo(10)));
+	}
+	
+	@Test
+	public void returnsValueOfDollarCentStringWithAnd() throws Exception {
+		assertThat(convertedString("64 and 12/100"), is(equalTo(6412)));
+		assertThat(convertedString("Sixty-four and 12"), is(equalTo(6412)));
+	}
+	
+	@Test
+	public void handlesHyphenOrNoHyphenForCompoundNumbers() throws Exception {
+		assertThat(convertedString("SIXTY FOUR"), is(equalTo(6400)));
+		assertThat(convertedString("SIXTY-FOUR"), is(equalTo(6400)));
+	}
+	
+	@Test
+	public void returnsValueOfDollarCentStringWithAndDollarsOrCents() throws Exception {
+		assertThat(convertedString("sixty nine dollars and twenty four cents"), is(equalTo(6924)));
 		assertThat(convertedString("sixty nine dollars and 28 cents"), is(equalTo(6928)));
-		assertThat(convertedString("59 dollars and one cent"), is(equalTo(5901))); 
-		assertThat(convertedString("59 dollars and 1/100"), is(equalTo(5901)));
-		assertThat(convertedString("20 dollar and 5 cent"), is(equalTo(2005)));
-		assertThat(convertedString("Four dollars and no cents" ), is(equalTo(400)));
-		assertThat(convertedString("fifty five and twelve cents" ), is(equalTo(5512)));
-		assertThat(convertedString("Three dollars and 0/100 cents"), is(equalTo(300)));
-		assertThat(convertedString("five and no cents"), is(equalTo(500)));
-		assertThat(convertedString("one dollars and no cents"), is(equalTo(100)));
-		assertThat(convertedString("eighty five and 12 cents"), is(equalTo(8512)));
-		assertThat(convertedString("eighty five dollars 12 cents"), is(equalTo(8512)));
-		assertThat(convertedString("fifty cent"), is(equalTo(50)));
-		assertThat(convertedString("1 dollar and one cent"), is(equalTo(101)));
-		assertThat(convertedString("ten cent"), is(equalTo(10)));
-		assertThat(convertedString("sixty nine dollars and 69 cents"), is(equalTo(6969)));
-		assertThat(convertedString("1 dollar and 1 cent"), is(equalTo(101)));
-		assertThat(convertedString("one dollar and zero cents"), is(equalTo(100)));
-		assertThat(convertedString("one dollars and one cent"), is(equalTo(101)));
-		assertThat(convertedString("6 dollars zero cents"), is(equalTo(600)));
-		assertThat(convertedString("91 dollars and 43 cents"), is(equalTo(9143)));
-		assertThat(convertedString("one cent"), is(equalTo(1)));
-		assertThat(convertedString("SEVEN dollars no cents"), is(equalTo(700)));
-		assertThat(convertedString("6 dollars and 0 cents"), is(equalTo(600)));
-		assertThat(convertedString("one dollar and 1 cent"), is(equalTo(101)));
-		assertThat(convertedString("one dollar and one cents"), is(equalTo(101)));
-		assertThat(convertedString("forty five cents"), is(equalTo(45)));
-		assertThat(convertedString("one dollars and one cents"), is(equalTo(101)));
-		assertThat(convertedString("one dollars and one cent"), is(equalTo(101)));
-		assertThat(convertedString("6 dollars"), is(equalTo(600)));
-		assertThat(convertedString("twelve dollar and eighty Seven cents"), is(equalTo(1287)));
-		assertThat(convertedString("twenty dollar and 5 cent"), is(equalTo(2005)));
-		assertThat(convertedString("sixty eight and TWENTY ONE CENTS"), is(equalTo(6821)));
-		assertThat(convertedString("one dollar and zero cents"), is(equalTo(100)));
-		assertThat(convertedString("50 six and 12/100"), is(equalTo(5612)));
-		assertThat(convertedString("1 dollars and one cents"), is(equalTo(101)));
-		assertThat(convertedString("Two dollars and twenty one cents"), is(equalTo(221)));
-		assertThat(convertedString("50 dollars and 11 cents"), is(equalTo(5011)));
-		assertThat(convertedString("FIVE DOLLARS AND TWELVE CENTS"), is(equalTo(512)));
-		assertThat(convertedString("fifty nine dollars and 1 cent"), is(equalTo(5901)));
-		assertThat(convertedString("ten cents"), is(equalTo(10)));
-		assertThat(convertedString("6 dollars and 65/100"), is(equalTo(665)));
-		assertThat(convertedString("Ninety-nine and 99/100"), is(equalTo(9999)));
-		assertThat(convertedString("Fifty-four and 130/100"), is(equalTo(5530)));
-		assertThat(convertedString("Thirty and 0/100"), is(equalTo(3000)));
-		assertThat(convertedString("Zero and 100/100"), is(equalTo(100)));
-		assertThat(convertedString("Zero and zero cents"), is(equalTo(0)));
-		assertThat(convertedString("Six"), is(equalTo(600)));
-		assertThat(convertedString("Sixty five"), is(equalTo(6500)));
-		assertThat(convertedString("Sixty-four"), is(equalTo(6400)));
-		assertThat(convertedString("64/100"), is(equalTo(64)));
+		assertThat(convertedString("sixty nine dollars and 28/100"), is(equalTo(6928)));
+		assertThat(convertedString("sixty nine dollar twenty four cents"), is(equalTo(6924)));
+		assertThat(convertedString("sixty nine dollar 28 cents"), is(equalTo(6928)));
+		assertThat(convertedString("sixty nine dollar 28/100"), is(equalTo(6928)));
+		assertThat(convertedString("sixty nine and twenty four cents"), is(equalTo(6924)));
+		assertThat(convertedString("sixty nine and 28 cents"), is(equalTo(6928)));
+		assertThat(convertedString("sixty nine and 28/100"), is(equalTo(6928)));
+	}
+	
+	@Test
+	public void handlesAmpersand() throws Exception {
+		assertThat(convertedString("sixty nine & twenty four cents"), is(equalTo(6924)));
+	}
+	
+	@Test
+	public void handlesNoOr0() throws Exception {
+		assertThat(convertedString("0 dollars and 0 cents"), is(equalTo(0)));
+		assertThat(convertedString("Zero dollars and zero cents"), is(equalTo(0)));
+		assertThat(convertedString("No dollars and no cents"), is(equalTo(0)));
+		assertThat(convertedString("0/100 cents"), is(equalTo(0)));
+	}
+	
+	@Test
+	public void handlesImproperFractionalAmounts() throws Exception {
+		assertThat(convertedString("130/100 cents"), is(equalTo(130)));
+		assertThat(convertedString("100/100 cents"), is(equalTo(100)));
+
+	}
+	
+	@Test
+	public void eliminatesWhiteSpaceAtBeginningOrEndOfString() throws Exception {
+		assertThat(convertedString("   one dollar and zero cents"), is(equalTo(100)));
+		assertThat(convertedString("one dollar and zero cents   "), is(equalTo(100)));
+		assertThat(convertedString("  one dollar and zero cents   "), is(equalTo(100)));
+	}
+	
+	@Test
+	public void eliminatesAdditionalWhiteSpaceInString() throws Exception {
+		assertThat(convertedString("1  dollars   and one    cents"), is(equalTo(101)));
+	}
+
+	@Test
+	public void handlesDash() throws Exception {
+		assertThat(convertedString("sixty-eight dollars --- 4/100 cents"), is(equalTo(6804)));
+		assertThat(convertedString("25 -- 47/100"), is(equalTo(2547)));
+	}
+	
+	@Test
+	public void handlesPlusSign() throws Exception {
 		assertThat(convertedString("$60 four + 32 cents"), is(equalTo(6432)));
 		assertThat(convertedString("twenty-four + 32/100"), is(equalTo(2432)));
 		assertThat(convertedString("22 + 46/100"), is(equalTo(2246)));
-		assertThat(convertedString("$45 ~ 46/100"), is(equalTo(4546)));
-		assertThat(convertedString("80 two , 46/100 cents"), is(equalTo(8246)));
-		assertThat(convertedString("sixty-eight dollars --- 4/100 cents"), is(equalTo(6804)));
-		assertThat(convertedString("$forty 5 ~ 16 cents"), is(equalTo(4516)));
-		assertThat(convertedString("25 -- 47/100"), is(equalTo(2547)));
+	}
+	
+	@Test
+	public void handlesComma() throws Exception {
 		assertThat(convertedString("80 two , 46/100 cents"), is(equalTo(8246)));
 		assertThat(convertedString("eighty-9, 46/100 cents"), is(equalTo(8946)));
-		assertThat(convertedString("eighty eight   and twenty-two cents"), is(equalTo(8822)));
-
-
+	}
+	
+	@Test
+	public void handlesTilda() throws Exception {
+		assertThat(convertedString("$forty 5 ~ 16 cents"), is(equalTo(4516)));
+		assertThat(convertedString("$45 ~ 46/100"), is(equalTo(4546)));
+	}
+	
+	@Test
+	public void handlesHundreds() throws Exception {
+		assertThat(convertedString("$405 and 16 cents"), is(equalTo(40516)));
+		assertThat(convertedString("Four hundred five and 46/100"), is(equalTo(40546)));
+		assertThat(convertedString("$Eighteen hundred and 56 cents"), is(equalTo(180056)));
+		assertThat(convertedString("Twenty two hundred five and 46/100"), is(equalTo(220546)));
+	}
+	
+	@Test
+	public void handlesIncreasingStringsToThousands() throws Exception {
+		assertThat(convertedString("FIVE THOUSAND AND 56/100"), is(equalTo(500056)));
+		assertThat(convertedString("Fifty-five THOUSAND AND 56/100"), is(equalTo(5500056)));
+		assertThat(convertedString("FIVE HUNDRED THREE THOUSAND AND 56/100"), is(equalTo(50300056)));
+		assertThat(convertedString("FIFTY-FIVE HUNDRED THOUSAND FIFTY-FIVE AND 56/100"), is(equalTo(550005556)));
+	}
+	
+	@Test
+	public void handlesIncreasingAndDecreasingStringsToThousands() {
+		assertThat(convertedString("Five hundred three thousand six hundred fifty-two and 36/100"), is(equalTo(50365236)));
 	}
 	
 	@Test

@@ -117,6 +117,8 @@ public class CheckParser {
 		String dollarSide = null;
 		String centSide = null;
 		input = input.toLowerCase();
+		input = input.trim(); //remove leading or trailing whitespace
+	    input = input.replaceAll("\\s+", " "); //remove extra whitespace within string
 		
 		//replace "+ / & / ~ / -- / ---" with "and"
 		if (input.contains(" + "))
