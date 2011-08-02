@@ -117,14 +117,13 @@ public class CheckParser {
 		String dollarSide = null;
 		String centSide = null;
 		input = input.toLowerCase();
-<<<<<<< HEAD
+
 		input = input.trim(); //remove leading or trailing whitespace
 	    input = input.replaceAll("\\s+", " "); //remove extra whitespace within string
 		
-=======
 		input = input.trim();
 		input = input.replaceAll("\\s+", " ");		
->>>>>>> 2f828b5f39f3c24afee469fafbc479d5bd9e1446
+
 		//replace "+ / & / ~ / -- / ---" with "and"
 		if (input.contains(" + "))
 			input = input.replace(" + ", " and ");
